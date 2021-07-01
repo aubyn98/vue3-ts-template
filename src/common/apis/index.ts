@@ -4,7 +4,7 @@ const req = require.context('./', true, /\.(js|ts)$/)
 const apis = req.keys().reduce((total, apiPath) => {
   const apiName = apiPath.match(/.*\/(.*)\.(js|ts)$/)![1]
   if (apiName !== 'index') {
-    return { ...total, ...req(apiPath).default(request) }
+    return { ...total, ...req(apiPath) }
   }
   return total
 }, {})
