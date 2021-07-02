@@ -67,7 +67,8 @@ export function request(
   config.headers ||= {}
 
   // 是否序列化post请求的数据
-  if (options.isQS && isPost) {
+  options.isQS ??= true
+  if (options.isQS && !options.form && isPost) {
     params = qs.stringify(params)
   }
 
