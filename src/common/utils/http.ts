@@ -1,8 +1,8 @@
 import axios from 'axios'
 import qs from 'qs'
 import { ElMessage } from 'element-plus'
-import { Dev, Pro } from '../config'
-
+import { Dev, Pro } from 'config'
+import { AxiosRequestConfig } from 'axios'
 // 判断开发环境
 const development = process.env.NODE_ENV === 'development'
 
@@ -45,15 +45,18 @@ function notBoolean(val: any) {
   return typeof val !== 'boolean'
 }
 const methods = ['get', 'post', 'head', 'put', 'options', 'delete']
+type method = 'get' | 'post' | 'head' | 'put' | 'options' | 'delete'
+type config = Omit<
+  AxiosRequestConfig,
+  'url' | 'params' | 'data' | 'method' | 'baseURL'
+>
+type options = { isQS?: boolean | null; form?: boolean | null }
 export function request(
   url: string,
-  method: 'get' | 'post' | 'head' | 'put' | 'options' | 'delete',
-  params: indexType | string,
-  config: { headers?: indexType } = {},
-  options: { isQS?: boolean | null; form?: boolean | null } = {
-    isQS: true,
-    form: false,
-  }
+  method: method,
+  params?: indexType | string,
+  config?: config,
+  options?: options
 ) {
   if (!url) throw new Error('argument[0] missing')
   if (typeof url !== 'string')
@@ -69,6 +72,13 @@ export function request(
   // 判断提交数据对应的key
   const paramsKey = isPost ? 'data' : 'params'
 
+  // 初始化
+  params ||= {}
+  config ||= {}
+  options ||= {
+    isQS: true,
+    form: false,
+  }
   // 如果没有请求头,则初始化请求头
   config.headers ||= {}
 
@@ -108,4 +118,16 @@ export function request(
       return Promise.reject(err)
     })
 }
+function simplify(type: 'get' | 'post') {
+  return function (
+    url: string,
+    params?: indexType,
+    config?: config,
+    options?: options
+  ) {
+    return request(url, type, params, config, options)
+  }
+}
+request.get = simplify('get')
+request.post = simplify('post')
 export default request
