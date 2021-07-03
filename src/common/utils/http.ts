@@ -1,6 +1,5 @@
 import axios from 'axios'
 import qs from 'qs'
-import { ElMessage } from 'element-plus'
 import { Dev, Pro } from 'config'
 import { AxiosRequestConfig } from 'axios'
 // 判断开发环境
@@ -31,11 +30,6 @@ http.interceptors.response.use(
     return response
   },
   (error) => {
-    if (error.message.includes('timeout')) {
-      ElMessage.error('请求超时，稍后再试')
-      return Promise.reject(error)
-    }
-    ElMessage.error('网络连接失败')
     return Promise.reject(error)
   }
 )
@@ -66,12 +60,6 @@ export function request(
     throw new TypeError('argument[1] must be a string')
   if (methods.indexOf(method) === -1)
     throw new TypeError('argument[1], method must be ' + methods.join(' | '))
-  // 判断是否为post请求
-  const isPost = method.toLocaleLowerCase() === 'post'
-
-  // 判断提交数据对应的key
-  const paramsKey = isPost ? 'data' : 'params'
-
   // 初始化
   params ||= {}
   config ||= {}
@@ -79,36 +67,50 @@ export function request(
     isQS: true,
     form: false,
   }
-  // 如果没有请求头,则初始化请求头
-  config.headers ||= {}
 
-  // 是否序列化post请求的数据
-  options.isQS ??= true
-  if (notBoolean(options.isQS))
+  // 是否序列化数据
+  const isQS = options.isQS ?? true
+  if (notBoolean(isQS))
     throw new TypeError('options.isQS must be a [boolean or null or undefined]')
-  if (options.isQS && !options.form && isPost) {
-    params = qs.stringify(params)
-  }
 
-  // 判断是否为post提交表单数据
-  options.form ??= false
-  if (notBoolean(options.form))
+  // 判断是否处理为表单数据
+  const isForm = options.form ?? false
+  if (notBoolean(isForm))
     throw new TypeError('options.form must be a [boolean or null or undefined]')
-  if (options.form && isPost) {
-    const form = new FormData()
-    Object.keys(params).forEach((key) => {
-      form.append(key, (<indexType>params)[key])
-    })
-    params = form
-    const ContentType = { 'Content-Type': 'multipart/form-data' } // 设置请求头
-    Object.assign(config.headers, ContentType)
-  }
+
+  // 判断是否为post请求
+  const isPost = method.toLocaleLowerCase() === 'post'
+
+  // 处理提交的数据
+  const transformRequest = [
+    function (data: indexType, headers: indexType) {
+      // post 请求处理数据
+      switch (isPost) {
+        // 处理表单数据
+        case isForm:
+          Object.assign(headers, { 'Content-Type': 'multipart/form-data' }) // 设置请求头
+          return Object.keys(data).reduce((form, key) => {
+            form.append(key, data[key])
+            return form
+          }, new FormData())
+        // 序列化参数
+        case isQS:
+          return qs.stringify(data)
+        case !isQS:
+          Object.assign(headers, { 'Content-Type': 'application/json' })
+          return JSON.stringify(data)
+      }
+
+      return data
+    },
+  ]
 
   // 返回请求结果
   return http({
     url,
     method,
-    [paramsKey]: params,
+    [isPost ? 'data' : 'params']: params,
+    transformRequest,
     ...config,
   })
     .then((res) => {
