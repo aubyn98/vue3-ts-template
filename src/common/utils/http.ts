@@ -85,20 +85,19 @@ export function request(
   const transformRequest = [
     function (data: indexType, headers: indexType) {
       // post 请求处理数据
-      switch (isPost) {
+      if (isPost) {
         // 处理表单数据
-        case isForm:
+        if (isForm) {
           Object.assign(headers, { 'Content-Type': 'multipart/form-data' }) // 设置请求头
           return Object.keys(data).reduce((form, key) => {
             form.append(key, data[key])
             return form
           }, new FormData())
+        }
         // 序列化参数
-        case isQS:
-          return qs.stringify(data)
-        case !isQS:
-          Object.assign(headers, { 'Content-Type': 'application/json' })
-          return JSON.stringify(data)
+        if (isQS) return qs.stringify(data)
+        Object.assign(headers, { 'Content-Type': 'application/json' })
+        return JSON.stringify(data)
       }
 
       return data
