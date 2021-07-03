@@ -44,7 +44,7 @@ type config = Omit<
   AxiosRequestConfig,
   'url' | 'params' | 'data' | 'method' | 'baseURL'
 >
-type options = { isQS?: boolean | null; form?: boolean | null }
+type options = { qs?: boolean | null; form?: boolean | null }
 export function request(
   url: string,
   method: method,
@@ -64,14 +64,14 @@ export function request(
   params ||= {}
   config ||= {}
   options ||= {
-    isQS: true,
+    qs: true,
     form: false,
   }
 
   // 是否序列化数据
-  const isQS = options.isQS ?? true
+  const isQS = options.qs ?? true
   if (notBoolean(isQS))
-    throw new TypeError('options.isQS must be a [boolean or null or undefined]')
+    throw new TypeError('options.qs must be a [boolean or null or undefined]')
 
   // 判断是否处理为表单数据
   const isForm = options.form ?? false
