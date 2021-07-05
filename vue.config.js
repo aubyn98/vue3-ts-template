@@ -17,5 +17,16 @@ module.exports = {
       .set('plugins', resolve('./src/common/plugins'))
       .set('mixins', resolve('./src/common/mixins'))
       .set('config', resolve('./src/common/config'))
+    config.module.rule('svg').exclude.add(resolve('./src/common/styles/svg'))
+    config.module
+      .rule('icons')
+      .test(/\.svg$/)
+      .include.add(resolve('./src/common/styles/svg'))
+      .end()
+      .use('svg-sprite-loader')
+      .loader('svg-sprite-loader')
+      .options({
+        symbolId: 'icons-[name]',
+      })
   },
 }
