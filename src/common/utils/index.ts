@@ -2,7 +2,7 @@ import { App } from 'vue'
 const req = require.context('./', true, /\.(js|ts)$/)
 const utils = req.keys().reduce((total, utilPath) => {
   const utilName = utilPath.match(/.*\/(.*)\.(js|ts)$/)![1]
-  if (utilName !== 'index') {
+  if (utilPath !== './index.ts') {
     return { ...total, [utilName]: req(utilPath).default }
   }
   return total
