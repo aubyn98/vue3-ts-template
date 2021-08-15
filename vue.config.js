@@ -8,11 +8,13 @@ module.exports = {
       sass: {
         prependData: `
         @import "~styles/variables.scss"
+        @import "~styles/mixins.scss"
         `,
       },
       scss: {
         prependData: `
         @import "~styles/variables.scss";
+        @import "~styles/mixins.scss";
         `,
       },
     },
