@@ -3,7 +3,21 @@ function resolve(dir) {
   return path.join(__dirname, dir)
 }
 module.exports = {
-  chainWebpack: (config) => {
+  css: {
+    loaderOptions: {
+      sass: {
+        prependData: `
+        @import "~styles/variables.scss"
+        `,
+      },
+      scss: {
+        prependData: `
+        @import "~styles/variables.scss";
+        `,
+      },
+    },
+  },
+  chainWebpack: config => {
     config.resolve.alias
       .set('@', resolve('./src'))
       .set('assets', resolve('./src/assets'))
