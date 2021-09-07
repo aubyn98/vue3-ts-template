@@ -1,6 +1,5 @@
 import { App } from 'vue'
 import apis from 'apis'
-import utils from 'utils'
 import comp from 'comp'
 export default function (app: App) {
   const plugins = require.context('./', true, /\.(js|ts)$/)
@@ -10,5 +9,5 @@ export default function (app: App) {
       plugins(pluginPath).default(app)
     }
   })
-  app.use(apis).use(utils).use(comp)
+  app.use(apis).use(comp)
 }
