@@ -16,20 +16,20 @@ const http = axios.create({
 
 // 实例请求拦截器
 http.interceptors.request.use(
-  (config) => {
+  config => {
     return config
   },
-  (error) => {
+  error => {
     return Promise.reject(error)
   }
 )
 
 // 实例响应拦截器
 http.interceptors.response.use(
-  (response) => {
+  response => {
     return response
   },
-  (error) => {
+  error => {
     return Promise.reject(error)
   }
 )
@@ -40,26 +40,14 @@ function notBoolean(val: any) {
 }
 const methods = ['get', 'post', 'head', 'put', 'options', 'delete']
 type method = 'get' | 'post' | 'head' | 'put' | 'options' | 'delete'
-type config = Omit<
-  AxiosRequestConfig,
-  'url' | 'params' | 'data' | 'method' | 'baseURL'
->
+type config = Omit<AxiosRequestConfig, 'url' | 'params' | 'data' | 'method' | 'baseURL'>
 type options = { qs?: boolean | null; form?: boolean | null }
-export function request(
-  url: string,
-  method: method,
-  params?: indexType | string,
-  config?: config,
-  options?: options
-) {
+export function request(url: string, method: method, params?: indexType | string, config?: config, options?: options) {
   if (!url) throw new Error('argument[0] missing')
-  if (typeof url !== 'string')
-    throw new TypeError('argument[0] must be a string')
+  if (typeof url !== 'string') throw new TypeError('argument[0] must be a string')
   if (!method) throw new Error('argument[1] missing')
-  if (typeof method !== 'string')
-    throw new TypeError('argument[1] must be a string')
-  if (methods.indexOf(method) === -1)
-    throw new TypeError('argument[1], method must be ' + methods.join(' | '))
+  if (typeof method !== 'string') throw new TypeError('argument[1] must be a string')
+  if (methods.indexOf(method) === -1) throw new TypeError('argument[1], method must be ' + methods.join(' | '))
   // 初始化
   params ||= {}
   config ||= {}
@@ -70,13 +58,11 @@ export function request(
 
   // 是否序列化数据
   const isQS = options.qs ?? true
-  if (notBoolean(isQS))
-    throw new TypeError('options.qs must be a [boolean or null or undefined]')
+  if (notBoolean(isQS)) throw new TypeError('options.qs must be a [boolean or null or undefined]')
 
   // 判断是否处理为表单数据
   const isForm = options.form ?? false
-  if (notBoolean(isForm))
-    throw new TypeError('options.form must be a [boolean or null or undefined]')
+  if (notBoolean(isForm)) throw new TypeError('options.form must be a [boolean or null or undefined]')
 
   // 判断是否为post请求
   const isPost = method.toLocaleLowerCase() === 'post'
@@ -108,24 +94,19 @@ export function request(
   return http({
     url,
     method,
-    [isPost ? 'data' : 'params']: params,
+    [isPost ? 'data' : 'params']: isPost ? params : new URLSearchParams(params),
     transformRequest,
     ...config,
   })
-    .then((res) => {
+    .then(res => {
       return res.data
     })
-    .catch((err) => {
+    .catch(err => {
       return Promise.reject(err)
     })
 }
 function simplify(type: 'get' | 'post') {
-  return function (
-    url: string,
-    params?: indexType,
-    config?: config,
-    options?: options
-  ) {
+  return function (url: string, params?: indexType, config?: config, options?: options) {
     return request(url, type, params, config, options)
   }
 }
