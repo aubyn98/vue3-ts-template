@@ -80,7 +80,7 @@ button {
   cursor: pointer;
   &.no-pointer,
   &[disabled] {
-    cursor: default;
+    cursor: not-allowed;
   }
 }
 
