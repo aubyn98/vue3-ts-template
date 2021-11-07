@@ -147,6 +147,16 @@ input[type='number'] {
   user-select: none;
 }
 
+.not-allowed {
+  cursor: not-allowed;
+  user-select: none;
+}
+
+.move {
+  cursor: move;
+  user-select: none;
+}
+
 // --------------------------------------------------------------
 
 // ------------------------清除浮动-------------------------------
