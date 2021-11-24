@@ -114,6 +114,10 @@ input[type='number'] {
 
 // ------------------------滚动条---------------------------------
 
+.scroll-y {
+  overflow-y: auto;
+}
+
 ::-webkit-input-placeholder {
   color: #b2b2b2;
   font-size: 14px;
