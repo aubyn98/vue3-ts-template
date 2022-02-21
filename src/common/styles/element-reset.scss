@@ -1,0 +1,265 @@
+$red: #fa5555;
+$y: #009cff;
+
+/*带背景的分页按钮背景色begin*/
+.el-pagination.is-background {
+  .btn-next,
+  .btn-prev,
+  .el-pager li {
+    background-color: #ffffff !important;
+    border: 1px solid #cccccc;
+    min-width: 28px;
+    border-radius: 4px;
+  }
+  .el-pager li:not(.disabled),
+  .btn-prev,
+  .btn-next {
+    border: 1px solid #e0e0e0 !important;
+    background-color: #fff !important;
+    color: #808080;
+    font-size: 13px;
+    border-radius: 2px;
+    font-weight: 400;
+  }
+  .el-pager li:not(.disabled) {
+    &.active {
+      background-color: #fff !important;
+      color: $y !important;
+      border: 1px solid $y !important;
+    }
+    &:hover {
+      color: $y !important;
+      background-color: #fff;
+      border: 1px solid $y !important;
+    }
+    &.active:hover {
+      background-color: #fff;
+      color: $y;
+    }
+  }
+}
+
+/*带背景的分页按钮背景色end*/
+
+/*不带背景的分页按钮背景色begin*/
+.el-pagination:not(.is-background) {
+  .el-pager li.active {
+    color: #08c0b9;
+    cursor: default;
+  }
+  .el-pager li:hover {
+    color: #08c0b9;
+  }
+  .el-pager li:not(.disabled):hover {
+    color: #08c0b9;
+  }
+}
+
+// 冒泡弹窗
+// .el-popper.is-light .el-popper__arrow::before {
+//   display: none;
+// }
+// .el-popper__arrow::before{
+//   display: none;
+// }
+// 日期范围选择器
+table.el-date-table td.in-range div {
+  background-color: #fff5dc;
+}
+
+.el-loading-mask.global-loding {
+  z-index: 9999 !important;
+  .el-loading-spinner {
+    width: 125px;
+    height: 125px;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0px 0px 10px rgba(203, 203, 203, 0.4);
+    border-radius: 10px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    > svg > circle {
+      stroke-width: 4;
+    }
+    .el-loading-text {
+      margin-top: 13px;
+      line-height: 18px;
+      font-size: 14px;
+      color: #808080;
+    }
+  }
+}
+
+.exitDialog.el-message-box {
+  vertical-align: 100px;
+  ._exit-confirm.el-button {
+    @mixin common {
+      background: $y;
+      border-color: $y;
+    }
+    @include common;
+    &.el-button--primary:focus {
+      @include common;
+    }
+    &.el-button--primary:hover {
+      color: white;
+      @include common;
+    }
+  }
+  ._exit-cancel.el-button {
+    &:focus,
+    &:hover {
+      color: $y;
+    }
+  }
+}
+
+// 弹框
+.el-dialog {
+  border-radius: 4px !important;
+  .el-dialog__header,
+  .el-dialog__body,
+  .el-dialog__footer {
+    // 默认去除
+    padding: 0;
+  }
+  .el-dialog__header {
+    height: 54px;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f5f5f5;
+    .el-dialog__title {
+      height: 24px;
+      font-size: 16px;
+      font-weight: 400;
+      text-align: LEFT;
+      color: #333333;
+      line-height: 24px;
+    }
+  }
+  .el-dialog__body {
+    padding: 0 24px;
+    overflow-y: auto;
+  }
+  .el-dialog__footer {
+    padding: 0 24px;
+    height: 66px;
+    box-shadow: 0px -1px 0px 0px #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 10px;
+  }
+}
+// 修正表格缩放后边框对不齐
+.el-table th.gutter {
+  display: table-cell !important;
+}
+.el-table colgroup.gutter {
+  display: table-cell !important;
+}
+// 自定义表格样式
+.c-table.el-table {
+  color: #505050;
+  // border 表格的 边框
+  &.el-table--group,
+  &.el-table--border {
+    border-color: #f5f5f5;
+    border-left: none;
+  }
+  // 表格底部边框
+  &.el-table::before,
+  &.el-table--group::after,
+  &.el-table--border::after {
+    display: none;
+    background-color: #f5f5f5;
+  }
+  &.c-table-border {
+    &.el-table::before,
+    &.el-table--group::after,
+    &.el-table--border::after {
+      display: none;
+    }
+  }
+  .el-table__header-wrapper {
+    thead {
+      font-weight: 400;
+      color: #808080;
+      // 表头行
+      .c-table-header {
+        height: 36px;
+        background-color: #f9fcfd;
+        border-color: #f5f5f5;
+        th.is-leaf {
+          border-bottom: none;
+        }
+        th:nth-last-child(2) {
+          border-right: none;
+        }
+        th {
+          background-color: #f9fcfd;
+          font-weight: 400;
+          padding-top: 0;
+          padding-bottom: 0;
+          // th 中 div.cell
+          .cell {
+            padding: 0;
+          }
+        }
+      }
+    }
+  }
+  .el-table__body-wrapper {
+    .el-table__body {
+      border-top: 1px solid #f5f5f5;
+    }
+    /* .el-table__empty-block {
+      background: url('~assets/images/icon_zw.png') no-repeat center 77px/206px 150px;
+      margin: 0 auto;
+      .el-table__empty-text {
+        display: none;
+      }
+    } */
+  }
+  // 行td单元格
+  .c-table-cell {
+    height: 48px;
+    padding: 7px;
+    border-color: #f5f5f5;
+    &:last-child {
+      border-right: none;
+    }
+    // td 中 div.cell
+    .cell {
+      font-size: 13px;
+      line-height: 20px;
+      padding: 0;
+    }
+  }
+  // 设置单元格  col 头部td单元格  cell 行td单元格
+  .c-table-col-pdl24,
+  .c-table-cell-pdl24 {
+    &:not(.cell) {
+      padding-left: 24px;
+      padding-right: 0;
+    }
+  }
+  .c-table-col-pdr24,
+  .c-table-cell-pdr24 {
+    &:not(.cell) {
+      padding-right: 24px;
+      padding-left: 0;
+    }
+  }
+}
+
+body .el-message {
+  padding: 8px 16px;
+  min-width: auto;
+}
